@@ -1,19 +1,20 @@
-name := "processtree-scala"
+name := "iterators-scala"
 
-version := "0.2"
+version := "0.3"
 
 scalaVersion := "2.12.9"
 
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
 
 libraryDependencies ++= Seq(
-  "org.scalatest"     %% "scalatest"  % "3.0.5" % Test,
+  "org.scalatest"     %% "scalatest"  % "3.0.5"  % Test,
   "com.storm-enroute" %% "scalameter" % "0.10.1" % Test,
-  "org.scala-stm"     %% "scala-stm"  % "0.8"   % Test
 )
 
-parallelExecution in Test := false
+libraryDependencies += "org.apache.commons" % "commons-collections4" % "4.4"
+
+testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
 
 logBuffered := false
 
-coverageExcludedPackages := """.*\.common\.Main"""
+parallelExecution in Test := false

@@ -65,7 +65,6 @@ object Main {
 
     val iterator = scala.io.Source.stdin.getLines
     val words = iterator.flatMap(_.split("(?U)[^\\p{Alpha}0-9']+"))
-    val no: List[String] = List("speech", "or", "oof", "ah")
     val window: inputHandler = new inputHandler(queueSize, wordSize, ignoreWords, mapSize)
     window.checkStuff(words)
 
@@ -94,17 +93,19 @@ class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapS
     }
   }
 
-  def checkStuff(input: Iterator[String]): Unit = {
+  def checkStuff(input: Iterator[String]): Int = {
     val runningTotal = input.scanLeft(Queue.empty[String])(queueAdding)
+    val rntSize = runningTotal.size - 1
     runningTotal.foreach { groupUp }
-
+    rntSize
   }
-  def groupUp(input: Queue[String]): Unit = {
+  def groupUp(input: Queue[String]): ListMap[String, Int] = {
     val freq = input.groupBy(identity).mapValues(_.size)
     val sortedFreq = ListMap(freq.toSeq.sortWith(_._2 < _._2): _*)
     val sizeFreq = sortedFreq.drop(sortedFreq.size - mapSize)
     println("Words in ascending order of appearance")
     sizeFreq.foreach(println)
+    sizeFreq
   }
 
   def checkAcceptableWord(inputWord: String, minLength: Int, ignoreWords: Array[String]): Int = {

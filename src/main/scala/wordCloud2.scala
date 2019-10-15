@@ -78,7 +78,7 @@ class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapS
   val queueAdding = (x: Queue[String], y: String) => {
     val inputQ = x
     val inputStr = y
-    if ((inputStr.length() >= wordSize) && (inputStr != "") && (wordCheck.contains(y) == false)) {
+    if (checkAcceptableWord(inputStr, wordSize, wordCheck) == 0) {
       val newInputQ = inputQ.enqueue(inputStr.toLowerCase())
       if (newInputQ.length > queueSize) {
         val dumped = newInputQ.dequeue
@@ -105,6 +105,15 @@ class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapS
     val sizeFreq = sortedFreq.drop(sortedFreq.size - mapSize)
     println("Words in ascending order of appearance")
     sizeFreq.foreach(println)
+  }
+
+  def checkAcceptableWord(inputWord: String, minLength: Int, ignoreWords: Array[String]): Int = {
+    if ((inputWord.length() >= minLength) && (inputWord != "") && (ignoreWords.contains(inputWord) == false)) {
+
+      0
+    } else {
+      1
+    }
   }
 
 }

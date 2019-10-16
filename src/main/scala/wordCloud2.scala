@@ -74,6 +74,7 @@ object Main {
 
 class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapSize: Int) {
   //These are the scanLeft operations we need to use
+  var memCounter = 0
   val queueAdding = (x: Queue[String], y: String) => {
     val inputQ = x
     val inputStr = y
@@ -93,24 +94,38 @@ class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapS
     }
   }
 
-  def checkStuff(input: Iterator[String]): Int = {
+  def checkStuff(input: Iterator[String]): Unit = {
     val runningTotal = input.scanLeft(Queue.empty[String])(queueAdding)
-    val rntSize = runningTotal.size - 1
     runningTotal.foreach { groupUp }
-    rntSize
+
   }
   def groupUp(input: Queue[String]): ListMap[String, Int] = {
     val freq = input.groupBy(identity).mapValues(_.size)
     val sortedFreq = ListMap(freq.toSeq.sortWith(_._2 < _._2): _*)
     val sizeFreq = sortedFreq.drop(sortedFreq.size - mapSize)
+    val sizeFreqTwo = sortedFreq.drop(sortedFreq.size - mapSize)
+    memCounter = memCounter + 1
+    if (memCounter > 100) {
+      val mb = 1024 * 1024
+      val runtime = Runtime.getRuntime
+      println("")
+      Console.err.print("** Used Memory:  " + (runtime.totalMemory - runtime.freeMemory) / mb)
+      Console.err.print(", " + "** Free Memory:  " + runtime.freeMemory / mb)
+      Console.err.print(", " + "** Total Memory: " + runtime.totalMemory / mb)
+      Console.err.print(", " + "** Max Memory:   " + runtime.maxMemory / mb)
+      println("")
+      println("")
+      memCounter = 0
+    }
     println("Words in ascending order of appearance")
-    sizeFreq.foreach(println)
-    sizeFreq
+    println(sizeFreq)
+    println("")
+    sizeFreqTwo
+
   }
 
   def checkAcceptableWord(inputWord: String, minLength: Int, ignoreWords: Array[String]): Int = {
     if ((inputWord.length() >= minLength) && (inputWord != "") && (ignoreWords.contains(inputWord) == false)) {
-
       0
     } else {
       1

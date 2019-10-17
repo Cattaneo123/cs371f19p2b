@@ -37,7 +37,7 @@ class TestClassAll extends FunSuite {
     test(description) {
       val window: inputHandler = new inputHandler(10, 2, Array.empty[String], 3)
       val it = Iterator("aaa", "bbb", "ccc", "ddd")
-      assert(window.checkStuff(it) === 4)
+      assert(window.checkStuff(it).length === 5)
     }
 
   }

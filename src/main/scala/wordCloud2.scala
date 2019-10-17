@@ -9,6 +9,13 @@ object Main {
   val SIZE_OF_WINDOW: Int = 1000
   val BAD_WORDS: Array[String] = Array.empty[String]
 
+  def tablePrint(freqTable: ListMap[String, Int]): Unit = {
+    println("")
+    println("Words by order of frequency")
+    freqTable.foreach { println }
+    println("")
+  }
+
   def main(args: Array[String]): Unit = {
     var queueSize: Int = SIZE_OF_WINDOW
     var wordSize: Int = SIZE_OF_WORDS
@@ -66,7 +73,8 @@ object Main {
     val iterator = scala.io.Source.stdin.getLines
     val words = iterator.flatMap(_.split("(?U)[^\\p{Alpha}0-9']+"))
     val window: inputHandler = new inputHandler(queueSize, wordSize, ignoreWords, mapSize)
-    window.checkStuff(words)
+    val a = window.checkStuff(words)
+    a.foreach { tablePrint }
 
   }
 
@@ -94,9 +102,9 @@ class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapS
     }
   }
 
-  def checkStuff(input: Iterator[String]): Unit = {
+  def checkStuff(input: Iterator[String]): Iterator[ListMap[String, Int]] = {
     val runningTotal = input.scanLeft(Queue.empty[String])(queueAdding)
-    runningTotal.foreach { groupUp }
+    runningTotal.map { groupUp }
 
   }
   def groupUp(input: Queue[String]): ListMap[String, Int] = {
@@ -117,9 +125,6 @@ class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapS
       println("")
       memCounter = 0
     }
-    println("Words in ascending order of appearance")
-    println(sizeFreq)
-    println("")
     sizeFreqTwo
 
   }

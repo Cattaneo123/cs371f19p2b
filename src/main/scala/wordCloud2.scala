@@ -122,7 +122,6 @@ class inputHandler(mapSize: Int, wordSize: Int, wordCheck: Array[String], queueS
       Console.err.print(", " + "** Total Memory: " + runtime.totalMemory / mb)
       Console.err.print(", " + "** Max Memory:   " + runtime.maxMemory / mb)
       println("")
-      println("")
       memCounter = 0
     }
     sizeFreqTwo

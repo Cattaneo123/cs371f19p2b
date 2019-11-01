@@ -47,8 +47,8 @@ object Main {
       }
       wordSize = args(1).toInt
 
-      if (args(2).toInt > args(0).toInt) {
-        throw new NumberFormatException("Value for arg 3 cannot be larger than value for arg 1");
+      if (args(2).toInt < args(0).toInt) {
+        throw new NumberFormatException("Value for arg 3 cannot be less than value for arg 1");
       }
       queueSize = args(2).toInt
     } else if (args.length == 4) {
@@ -62,8 +62,8 @@ object Main {
       }
       wordSize = args(1).toInt
 
-      if (args(2).toInt > args(0).toInt) {
-        throw new NumberFormatException("Value for arg 3 cannot be larger than value for arg 1");
+      if (args(2).toInt < args(0).toInt) {
+        throw new NumberFormatException("Value for arg 3 cannot be less than value for arg 1");
       }
       queueSize = args(2).toInt
 
@@ -80,7 +80,7 @@ object Main {
 
 }
 
-class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapSize: Int) {
+class inputHandler(mapSize: Int, wordSize: Int, wordCheck: Array[String], queueSize: Int) {
   //These are the scanLeft operations we need to use
   var memCounter = 0
   val queueAdding = (x: Queue[String], y: String) => {
@@ -109,7 +109,7 @@ class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapS
   }
   def groupUp(input: Queue[String]): ListMap[String, Int] = {
     val freq = input.groupBy(identity).mapValues(_.size)
-    val sortedFreq = ListMap(freq.toSeq.sortWith(_._2 < _._2): _*)
+    val sortedFreq = ListMap(freq.toSeq.sortWith(_._2 > _._2): _*)
     val sizeFreq = sortedFreq.drop(sortedFreq.size - mapSize)
     val sizeFreqTwo = sortedFreq.drop(sortedFreq.size - mapSize)
     memCounter = memCounter + 1

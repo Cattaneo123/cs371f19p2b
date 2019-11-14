@@ -9,7 +9,7 @@ object Main {
   val SIZE_OF_WINDOW: Int = 1000
   val BAD_WORDS: Array[String] = Array.empty[String]
 
-  def tablePrint(freqTable: ListMap[String, Int]): Unit = {
+  def tablePrint(freqTable: Seq[(String, Int)]): Unit = {
     println("")
     println("Words by order of frequency")
     freqTable.foreach { println }
@@ -80,7 +80,7 @@ object Main {
 
 }
 
-class inputHandler(mapSize: Int, wordSize: Int, wordCheck: Array[String], queueSize: Int) {
+class inputHandler(queueSize: Int, wordSize: Int, wordCheck: Array[String], mapSize: Int) {
   //These are the scanLeft operations we need to use
   var memCounter = 0
   val queueAdding = (x: Queue[String], y: String) => {
@@ -102,16 +102,19 @@ class inputHandler(mapSize: Int, wordSize: Int, wordCheck: Array[String], queueS
     }
   }
 
-  def checkStuff(input: Iterator[String]): Iterator[ListMap[String, Int]] = {
+  def checkStuff(input: Iterator[String]): Iterator[Seq[(String, Int)]] = {
     val runningTotal = input.scanLeft(Queue.empty[String])(queueAdding)
     runningTotal.map { groupUp }
 
   }
-  def groupUp(input: Queue[String]): ListMap[String, Int] = {
-    val freq = input.groupBy(identity).mapValues(_.size)
-    val sortedFreq = ListMap(freq.toSeq.sortWith(_._2 > _._2): _*)
-    val sizeFreq = sortedFreq.drop(sortedFreq.size - mapSize)
-    val sizeFreqTwo = sortedFreq.drop(sortedFreq.size - mapSize)
+  def groupUp(input: Queue[String]): Seq[(String, Int)] = {
+    val thingMap = input.groupBy(identity).mapValues(_.size).toSeq.sortWith(_._2 > _._2).take(mapSize)
+
+    if (input.size >= mapSize) {
+      println()
+      println("Map of the numbers")
+      thingMap.foreach { println }
+    }
     memCounter = memCounter + 1
     if (memCounter > 100) {
       val mb = 1024 * 1024
@@ -124,7 +127,7 @@ class inputHandler(mapSize: Int, wordSize: Int, wordCheck: Array[String], queueS
       println("")
       memCounter = 0
     }
-    sizeFreqTwo
+    thingMap
 
   }
 

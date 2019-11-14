@@ -17,10 +17,10 @@ class TestClassAll extends FunSuite {
 
   }
 
-  def testGroupUp(description: String, input: Queue[String], outcome: ListMap[String, Int]) {
+  def testGroupUp(description: String, input: Queue[String], outcome: String) {
     test(description) {
       val window: inputHandler = new inputHandler(10, 1, Array.empty[String], 5)
-      assert(window.groupUp(input) === outcome)
+      assert(window.groupUp(input).toString === outcome)
     }
 
   }
@@ -49,7 +49,7 @@ class TestClassAll extends FunSuite {
   testIgnoreWords("Testing if blacklisted words are ignored", 1, "more", testIgnoreArray, 1)
   testIgnoreWords("Testing if long words are not ignored", 4, "five", testEmptArray, 0)
   testIgnoreWords("Testing if non-blacklisted words are ignored", 1, "aaaaaaa", testIgnoreArray, 0)
-  testGroupUp("Testing if the queue is being mapped correctly", testQueue, ListMap("is" -> 1, "this" -> 1, "test" -> 1, "a" -> 2))
+  testGroupUp("Testing if the queue is being mapped correctly", testQueue, "Vector((a,2), (is,1), (this,1), (test,1))")
   //testCheckArgs("Tests if the args are being input correctly", 10, 2, 10, testIgnoreArray)
   testGroupUpMapSize("Tests that the maps are the right size", testQueue, 4)
   testWordAdding("Tests whether the words are being added")
